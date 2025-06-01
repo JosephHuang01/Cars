@@ -1,22 +1,12 @@
 import unittest
 
-# This works!!!
-# python unit_tests/battery_unit_test.py
-
-# This works as well!!!
-# python -m unit_tests.battery_unit_test
-
+# All below works!!!
 # python -m unit_tests.components.battery_unit_test
 
 
-# from ..components.battery import Battery
-# car_1 = Battery.traveled_distance(25)
+from components.battery import Battery
+#car_1 = Battery.traveled_distance(25)
 
-import sys
-
-sys.path.insert(0, r'C:\Users\kungf\OneDrive\Documents\Source\Cars\components')
-
-from battery import Battery
 
 class TestBattery(unittest.TestCase):
 
