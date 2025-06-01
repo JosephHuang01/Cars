@@ -1,0 +1,8 @@
+git clone https://github.com/JosephHuang01/Cars.git
+
+cd cars
+
+code .
+
+Save changes
+Commit with explanation message
