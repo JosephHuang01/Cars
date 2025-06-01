@@ -1,9 +1,6 @@
 class Battery():
-    def __init__(self, battery_size=70, kwh_used_per_mile = 0.2, capacity_max = 50):
+    def __init__(self, battery_size=70):
         self.battery_size = battery_size
-        self.kwh_used_per_mile = kwh_used_per_mile
-        self.capacity_max = capacity_max
-        self.capacity = capacity_max
     
     def describe_battery(self):
         #print("This car has a " + str(self.battery_size) + "-kWh battery.")
@@ -17,8 +14,15 @@ class Battery():
         
         return range
     
-    def traveled_distance(self, miles):
+    def travel_distance(self, miles, kwh_used_per_mile = 0.2, capacity_max = 50):
         self.miles = miles
-        self.life = 100
-        #self.life = self.capacity/capacity_max
-        #self.capacity_used = miles * kwh_used_per_mile
+        self.kwh_used_per_mile = kwh_used_per_mile
+        self.capacity_used = miles * kwh_used_per_mile
+        self.capacity = capacity_max - self.capacity_used
+        self.capacity_max = capacity_max
+        if self.capacity >= 50:
+            self.capacity = capacity_max
+        if self.capacity == capacity_max:
+            self.life = 100
+        self.life = (self.capacity/capacity_max) * 100
+        return self.life
