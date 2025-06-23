@@ -1,18 +1,8 @@
-# from components.battery import Battery
-
-# #python  components/battery_unit_test.py
-
-# test_battery_1 = Battery()
-# test_battery_1.travel_distance(25)
-
-# import sys
-# print (sys.path )
-# #battery_1 = Battery.traveled_distance(25)
-
 import pygame
 from factories.build_specification import BuildSpecification
-from components.car import CarColor
 #import pygame_gui
+
+# todo: move this to main.py in the root folder
 
 pygame.init()
 
@@ -37,7 +27,7 @@ is_running = True
 while is_running:
     #background.fill(pygame.Color("#08226D"))
     #window_surface.fill((173, 216, 230))
-    window_surface.fill(CarColor.BLACK)
+    window_surface.fill(build_specification.color_list[0])
 
     player = [
         (car_x, car_y),
@@ -50,10 +40,10 @@ while is_running:
         (car_x, car_y - 40)
     ]
 
-    pygame.draw.polygon(window_surface, CarColor.BLUE, player)
+    pygame.draw.polygon(window_surface, build_specification.color_list[2], player)
 
-    pygame.draw.circle(window_surface, (CarColor.GRAY), (car_x + 25, car_y + 10), 15)
-    pygame.draw.circle(window_surface, (CarColor.GRAY), (car_x + 95, car_y + 10), 15)
+    pygame.draw.circle(window_surface, (50, 50, 50), (car_x + 25, car_y + 10), 15)
+    pygame.draw.circle(window_surface, (50, 50, 50), (car_x + 95, car_y + 10), 15)
 
     key = pygame.key.get_pressed()
     if key[pygame.K_a] == True:

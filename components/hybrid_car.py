@@ -1,36 +1,30 @@
 from components.car import Car
 from components.battery import Battery
 from components.gas_tank import GasTank
-from components.electric_car import ElectricCar
-from components.gas_car import GasCar
 
 class HybridCar(Car):
-    def __init__(self, make, model, year, gas_tank_gallon, battery_size):
+    def __init__(self, make, model, year, battery_size, capacity = 15, gallons_used_per_mile = 0.05):
         super().__init__(make, model, year)
         self.battery = Battery(battery_size)
-        self.gas_tank = GasTank(gas_tank_gallon)
-        self.gallons_used_per_mile = 0.05
+        self.gas_tank = GasTank(capacity, gallons_used_per_mile)
+        self.capacity = capacity
+        self.capacity_left = capacity
+        self.kwh_used_per_mile = 0.2
     
-    def battery_charge(self, battery):
-        if ElectricCar(Car).battery == 0:
-            battery += 70
-        elif ElectricCar(Car).battery > 0:
-            GasCar(Car).gas_tank_supply > 0
+    def travel_distance(self, direction, miles):
+        if direction == "forward":
+            self.drive_forward(miles)
+            self.gas_tank.travel_distance(miles)
+            self.miles_drove += miles
     
-    def move_with_gas(self, gallons, direction, distance):
-        if gallons > 0:
-            if self.gas_tank.travel_distance(distance, self.gallons_used_per_mile):
-                if direction == "forward":
-                    self.position.y += distance
-                elif direction == "backward":
-                    self.position.y -= distance
-                elif direction == "left":
-                    self.position.x -= distance
-                elif direction == "right":
-                    self.position.x += distance
-        if distance >= 300:
-            GasCar(Car).gas_tank_supply = 0
-            if GasCar(Car).gas_tank_supply == 0:
-                distance += 0
-        if self.read_odometer() == 20:
-            self.gas_tank.capacity -= 1
+    def fill_gas(self, gallons):
+        self.gas_tank.capacity = min(self.gas_tank.capacity_left + gallons, self.gas_tank.capacity)
+        self.gas_tank.percentage = (self.gas_tank.capacity_left/self.gas_tank.capacity) * 100
+    
+    def charge(self):
+        self.capacity_left = self.capacity
+        self.life = 100
+    
+    def recharge_battery(self, kwh_charge):
+        self.capacity = min(self.capacity + kwh_charge, self.capacity)
+        self.life = (self.capacity/self.capacity) * 100

@@ -5,8 +5,8 @@ class GasTank():
         self.capacity_left = capacity
         self.percentage = 100
     
-    def travel_distance(self, miles):
-        self.capacity_left = self.capacity_left - (miles * self.gallons_used_per_mile)
+    def travel_distance(self, miles_drove):
+        self.capacity_left = self.capacity_left - (miles_drove * self.gallons_used_per_mile)
         self.percentage = (self.capacity_left/self.capacity) * 100
         return self.percentage
     
