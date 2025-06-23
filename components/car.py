@@ -6,20 +6,26 @@ class Car():
         self.odometer_reading = 0
         self.gas_tank_supply = 15
         self.position = Position(0,0)
+        self.miles_drove = 0
+        self.direction = "forward"
 
     def drive_forward(self, distance):
+        self.direction = "forward"
         self.position.y += distance
         self.__increment_odometer(distance)
     
     def drive_backward(self, distance):
+        self.direction = "backward"
         self.position.y -= distance
         self.__increment_odometer(distance)
     
     def turn_left(self, distance):
+        self.direction = "left"
         self.position.x -= distance
         self.__increment_odometer(distance)
     
     def turn_right(self, distance):
+        self.direction = "right"
         self.position.x += distance
         self.__increment_odometer(distance)
     
