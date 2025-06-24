@@ -33,8 +33,8 @@ pygame.display.set_caption('Quick Start')
 
 window_surface = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-car_x = 300
-car_y = 300
+car_row = 300
+car_column = 300
 #player = pygame.Rect((300, 250, 100, 200))
 
 background = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -45,14 +45,21 @@ grid = [[0 for _ in range(GRID_SIZE)] for _ in range(GRID_SIZE)]
 is_running = True
 
 while is_running:
+    window_surface.fill(CarColor.BLACK)
     for row in range(GRID_SIZE):
         for column in range(GRID_SIZE):
+            color = CarColor.WHITE
+            if grid[row][column] == 1:
+                color = CarColor.BLUE
             x = (MARGIN + CELL_SIZE) * column + MARGIN
             y = (MARGIN + CELL_SIZE) * row + MARGIN
+            pygame.draw.rect(window_surface, color, [x, y, CELL_SIZE, CELL_SIZE])
+    
+    car_x = (MARGIN + CELL_SIZE) * car_column + MARGIN
+    car_y = (MARGIN + CELL_SIZE) * car_row + MARGIN
 
     #background.fill(pygame.Color("#08226D"))
     #window_surface.fill((173, 216, 230))
-    window_surface.fill(CarColor.BLACK)
 
     player = [
         (car_x, car_y),
@@ -87,23 +94,22 @@ while is_running:
     # if 'sunroof' in random_car_model.accessories:
     #     pygame.draw.rect(window_surface, (100, 100, 100), (car_x + 40, car_y - 60, 40, 10))
 
-    key = pygame.key.get_pressed()
-    if key[pygame.K_a] == True:
-        car_x -= 2
-        #player.move_ip(-1, 0)
-    elif key[pygame.K_d] == True:
-        car_x += 2
-        #player.move_ip(1, 0)
-    elif key[pygame.K_w] == True:
-        car_y -= 2
-        #player.move_ip(0, -1)
-    elif key[pygame.K_s] == True:
-        car_y += 2
-        #player.move_ip(0, 1)
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             is_running = False
+        elif event.type ==  pygame.KEYDOWN:
+            if event[pygame.K_a] == True and car_column > 0:
+                car_column -= 1
+        #player.move_ip(-1, 0)
+            elif event[pygame.K_d] == True and car_column < GRID_SIZE - 1:
+                car_column += 1
+        #player.move_ip(1, 0)
+            elif event[pygame.K_w] == True and car_row > 0:
+                car_row -= 1
+        #player.move_ip(0, -1)
+            elif event[pygame.K_s] == True and car_row < GRID_SIZE - 1:
+                car_row += 1
+        #player.move_ip(0, 1)
 
     #window_surface.blit(background, (0, 0))
     pygame.display.update()
