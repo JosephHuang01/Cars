@@ -1,6 +1,7 @@
 from components.coordinate_direction import CoordinateDirection
 from components.driving_direction import DrivingDirection
 from components.city_map import CityMap
+import random
 
 class Car():
     def __init__(self, make, model, year):
@@ -53,22 +54,60 @@ class Car():
         if speed == self.max_speed:
             speed
 
-class Position:
+class Position():
     def __init__(self, x, y):
         self.x = x
         self.y = y
 
-class Seat:
+class Seat():
     def __init__(self, number):
         self.number = number
 
-class Tire:
+class Tire():
     def __init__(self, pressure):
         self.pressure = pressure
 
-class CarColor:
-    RED = [255, 0 ,0]
-    BLACK = [0, 0, 0]
-    GRAY = [128, 128, 128]
-    BLUE = [0, 0, 255]
-    WHITE = [255, 255, 255]
+class CarColor():
+    RED = (255, 0 ,0)
+    BLACK = (0, 0, 0)
+    GRAY = (128, 128, 128)
+    BLUE = (0, 0, 255)
+    WHITE = (255, 255, 255)
+
+class RandomizeCarColor():
+    def randomize_car_color(self):
+        color_options = [CarColor.BLUE, CarColor.RED, CarColor.GRAY, CarColor.WHITE]
+        return random.choice(color_options)
+
+class CarModel():
+    def __init__(self, name, body_shape, wheel_size, accessories=None):
+        self.name = name
+        self.body_shape = body_shape
+        self.wheel_size = wheel_size
+        self.accessories = accessories or []
+    
+    def randomize_car_model(self):
+        TOYOTA_MODEL = CarModel(
+            name='Toyota',
+            body_shape=[(0, 0), (120, 0), (120, -40), (80, -70), (40, -70), (0, -40)],
+            wheel_size=15,
+            accessories=['spoiler']
+            )
+
+        TESLA_MODEL = CarModel(
+            name='Tesla',
+            body_shape=[(0, 0), (140, 0), (140, -35), (100, -65), (40, -65), (0, -35)],
+            wheel_size=20,
+            accessories=['sunroof']
+            )
+
+        HONDA_MODEL = CarModel(
+            name='Honda',
+            body_shape=[(0, 0), (100, 0), (100, -40), (70, -60), (30, -60), (0, -40)],
+            wheel_size=18,
+            accessories=[]
+            )
+
+        car_models = [TOYOTA_MODEL, TESLA_MODEL, HONDA_MODEL]
+        selected_car = random.choice(car_models)
+        return selected_car
