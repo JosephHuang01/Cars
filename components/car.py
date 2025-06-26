@@ -73,11 +73,25 @@ class CarColor():
     GRAY = (128, 128, 128)
     BLUE = (0, 0, 255)
     WHITE = (255, 255, 255)
+    GREEN = (0, 255, 0)
 
 class RandomizeCarColor():
     def randomize_car_color(self):
         color_options = [CarColor.BLUE, CarColor.RED, CarColor.GRAY, CarColor.WHITE]
         return random.choice(color_options)
+
+class CarList():
+    def __init__(self, make, model, year):
+        self.make = make
+        self.model = model
+        self.year = year
+    
+    def randomize_model_list(self):
+        make = ['TOYOTA', 'FORD', 'HONDA']
+        model = ['COROLLA', 'MUSTANG', 'CIVIC']
+        year = [2017, 2024, 2020]
+        index = random.randint(0, len(make) -1)
+        return CarList(make[index], model[index], year[index])
 
 class CarModel():
     def __init__(self, name, body_shape, wheel_size, accessories=None):
