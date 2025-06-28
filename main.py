@@ -9,10 +9,39 @@
 # print (sys.path )
 # #battery_1 = Battery.traveled_distance(25)
 
+import pyodbc
+print ('pyodbc ok!')
+
 import pygame
 from factories.build_specification import BuildSpecification
 from components.car import CarColor, RandomizeCarColor, CarList
 #import pygame_gui
+
+
+
+# Connect to SQL Server
+conn = pyodbc.connect(
+    'DRIVER={ODBC Driver 17 for SQL Server};'
+    'SERVER=localhost;'      # e.g., 'localhost\\SQLEXPRESS' or '192.168.1.100'
+    'DATABASE=CarExplorer;'  # e.g., 'insurance_db'
+    #'UID=YOUR_USERNAME;'            # If using SQL Auth (not needed for Windows Auth)
+    #'PWD=YOUR_PASSWORD;'            # If using SQL Auth
+    # For Windows Authentication:
+    'Trusted_Connection=yes;'
+)
+
+cursor = conn.cursor()
+
+# all rows
+print ('select all rows')
+cursor.execute("select * from coverages" )
+
+rows = cursor.fetchall()
+
+for row in rows:
+    print(row)
+
+
 
 pygame.init()
 
@@ -38,8 +67,8 @@ window_surface = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 car_row = 0.5
 car_column = 3.5
-destination_row = 5.5
-destination_column = 6.5
+#destination_row = 5.5
+#destination_column = 6.5
 
 destinations = [
     (5.5, 6.5),
@@ -51,7 +80,8 @@ current_destination = 0
 destination_row, destination_column = destinations[current_destination]
 
 pause_time = 2000
-is_paused = Falsepause_start = 0
+is_paused = False
+pause_start = 0
 
 move_speed = 0.01
 #player = pygame.Rect((300, 250, 100, 200))
@@ -70,6 +100,21 @@ previous_direction = 'RIGHT'
 status = 'Driving'
 
 is_running = True
+
+button_width = 100
+button_height = 40
+button_x = 40
+button_y = SCREEN_HEIGHT - button_height - 40
+button_color = (CarColor.GRAY)
+button_text_color = (CarColor.BLACK)
+manual_pause = False
+
+manual_pause_start = 0
+total_manual_pause_duration = 0
+
+is_waiting = False
+
+reached_destinations = []
 
 original_width = 120
 original_height = 70
@@ -133,55 +178,10 @@ while is_running:
     # pygame.draw.circle(window_surface, (CarColor.GRAY),
     #                    (int(center_x - scale_factor * 30), int(center_y + scale_factor * 35 + 5)), wheel_radius)
 
-    if not is_paused:
-        if abs(car_column - destination_column) > 0.01:
-            if car_column < destination_column:
-                car_column += move_speed
-                direction = 'RIGHT'
-            elif car_column > destination_column:
-                car_column -= move_speed
-                direction = 'LEFT'
-        elif abs(car_row - destination_row) > 0.01:
-            if car_row < destination_row:
-                car_row += move_speed
-                direction = 'DOWN'
-            elif car_row > destination_row:
-                car_row -= move_speed
-                direction = 'UP'
-        else:
-            status = 'Arrived'
-            is_paused = True
-            pause_start = pygame.time.get_ticks()
-    else:
-        if pygame.time.get_ticks() - pause_start >= pause_time:
-            current_destination += 1
-            if current_destination < len(destinations):
-                destination_row
-    
-        if status != 'Arrived':
-            if direction != previous_direction:
-                status = 'Turning'
-            else:
-                status = 'Driving'
-    
-    angle = 0
-    if direction == 'RIGHT':
-        angle = 0
-    elif direction == 'LEFT':
-        angle = 180
-    elif direction == 'UP':
-        angle = 90
-    elif direction == 'DOWN':
-        angle = 270
-    
-    rotated_car = pygame.transform.rotate(car_surface, angle)
-    rotated_rect = rotated_car.get_rect(center=(car_x + CELL_SIZE/2, car_y + CELL_SIZE/2))
-    window_surface.blit(rotated_car, rotated_rect.topleft)
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             is_running = False
-        elif event.type ==  pygame.KEYDOWN:
+        elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a and car_column > 0:
                 car_column -= 1
         #player.move_ip(-1, 0)
@@ -194,6 +194,15 @@ while is_running:
             elif event.key == pygame.K_s and car_row < GRID_SIZE - 1:
                 car_row += 1
         #player.move_ip(0, 1)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = event.pos
+            if (button_x <= mouse_x <= button_x + button_width) and (button_y <= mouse_y <= button_y + button_height):
+                if is_waiting:
+                    if manual_pause:
+                        total_manual_pause_duration += pygame.time.get_ticks() - manual_pause_start
+                    else:
+                        manual_pause_start = pygame.time.get_ticks()
+                manual_pause = not manual_pause
     
     # status_text = font.render("Status: " + status, True, (0, 0, 0))
     # direction_text = font.render("Direction: " + direction, True, (0, 0, 0))
@@ -215,15 +224,24 @@ while is_running:
         ["Year", car_list.year]
     ]
 
-    table_border_color = (0, 0, 0)
-    cell_background_color = (200, 200, 200)
-    text_color = (0, 0, 0)
+    table_border_color = CarColor.BLACK
+    cell_background_color = CarColor.GRAY
+    text_color = CarColor.BLACK
     table_padding = 5
     table_width = 2 * cell_width
     table_height = 5 * cell_height
     table_margin = 20
-    table_x = SCREEN_WIDTH - table_width- table_margin
+    table_x = SCREEN_WIDTH - table_width - table_margin
     table_y = SCREEN_HEIGHT - table_height - table_margin
+
+    #dest_table_width = 2 * cell_width
+    #dest_table_x = SCREEN_WIDTH - dest_table_width - table_margin
+    dest_table_y = table_margin
+    #dest_cell_width = 150
+    #dest_cell_height = 30
+    #dest_table_border_color = CarColor.BLACK
+    #dest_cell_background_color = CarColor.GREEN
+    #dest_text_color = CarColor.BLACK
 
     for row in range(rows):
         for col in range(cols):
@@ -234,6 +252,75 @@ while is_running:
             cell_text = font.render(str(table_data[row][col]), True, text_color)
             text_rect = cell_text.get_rect(center=(cell_x + cell_width/2, cell_y + cell_height/2))
             window_surface.blit(cell_text, text_rect)
+
+    if not manual_pause:
+        if status == 'Driving':
+            if abs(car_column - destination_column) > 0.01:
+                if car_column < destination_column:
+                    car_column += move_speed
+                    previous_direction = direction
+                    direction = 'RIGHT'
+                elif car_column > destination_column:
+                    car_column -= move_speed
+                    previous_direction = direction
+                    direction = 'LEFT'
+            elif abs(car_row - destination_row) > 0.01:
+                if car_row < destination_row:
+                    car_row += move_speed
+                    previous_direction = direction
+                    direction = 'DOWN'
+                elif car_row > destination_row:
+                    car_row -= move_speed
+                    previous_direction = direction
+                    direction = 'UP'
+            else:
+                status = 'Arrived'
+                pause_start = pygame.time.get_ticks()
+                is_waiting = True
+                total_manual_pause_duration = 0
+                reached_destinations.append((destination_row, destination_column))
+        elif status == 'Arrived' and is_waiting:
+            if pygame.time.get_ticks() - pause_start - total_manual_pause_duration >= pause_time:
+                current_destination += 1
+                if current_destination < len(destinations):
+                    destination_row, destination_column = destinations[current_destination]
+                    status = 'Driving'
+                    is_waiting = False
+                else:
+                    status = 'Trip Complete'
+    else:
+        if is_waiting:
+            pass
+    
+    if status != 'Arrived':
+        status = 'Driving'
+    
+    angle = 0
+    if direction == 'RIGHT':
+        angle = 0
+    elif direction == 'LEFT':
+        angle = 180
+    elif direction == 'UP':
+        angle = 90
+    elif direction == 'DOWN':
+        angle = 270
+    
+    rotated_car = pygame.transform.rotate(car_surface, angle)
+    rotated_rect = rotated_car.get_rect(center=(car_x + CELL_SIZE/2, car_y + CELL_SIZE/2))
+    window_surface.blit(rotated_car, rotated_rect.topleft)
+
+    pygame.draw.rect(window_surface, button_color, (button_x, button_y, button_width, button_height))
+    button_label = 'Resume' if manual_pause else 'Pause'
+    button_text = font.render(button_label, True, button_text_color)
+    button_text_rect = button_text.get_rect(center=(button_x + button_width/2, button_y + button_height/2))
+    window_surface.blit(button_text, button_text_rect)
+
+    dest_table_width = 2 * cell_width
+    pygame.draw.rect(window_surface, cell_background_color, (table_x, dest_table_y, dest_table_width, cell_height))
+    pygame.draw.rect(window_surface, table_border_color, (table_x, dest_table_y, dest_table_width, cell_height), 2)
+    header_text = font.render("Reached Destinations", True, text_color)
+    header_rect = header_text.get_rect(center = (table_x + dest_table_width/2, dest_table_y + cell_height/2))
+    window_surface.blit(header_text, header_rect)
 
     pygame.display.update()
     pygame.time.Clock().tick(60)
