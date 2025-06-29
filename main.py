@@ -14,10 +14,13 @@ print ('pyodbc ok!')
 
 import pygame
 from factories.build_specification import BuildSpecification
-from components.car import CarColor, RandomizeCarColor, CarList
+from components.car import CarColor, RandomizeCarColor, CarList, Car, Position
+from datetime import datetime
+
 #import pygame_gui
 
 
+# Begin of trial block *************************************************
 
 # Connect to SQL Server
 conn = pyodbc.connect(
@@ -33,18 +36,56 @@ conn = pyodbc.connect(
 cursor = conn.cursor()
 
 # all rows
-print ('select all rows')
-cursor.execute("select * from coverages" )
+#print ('select all rows')
+#cursor.execute("select TripId, StartDateTime, EndDateTime from game.Trips where CarId = 41964")
 
+#rows = cursor.fetchall()
+
+# for row in rows:
+#     print(row)
+
+cursor.execute("select top 5 * from game.Cars")
 rows = cursor.fetchall()
-
 for row in rows:
     print(row)
 
+cursor.execute("select * from game.Cars")
+first_row = cursor.fetchone()
+print(first_row)
 
+if first_row:
+    car_id = first_row.CarId
+    car_make = first_row.Make
+    car_model = first_row.Model
+    car_year = first_row.Year
+
+print(car_id, car_make)
+
+car_a = Car(car_make, car_model, car_year)
+print(car_a)
+
+cursor.execute("select * from game.Trips where CarID = ? ORDER BY EndDateTime DESC", car_id)
+row_one = cursor.fetchone()
+print(row_one)
+
+if row_one:
+    trip_id = row_one.TripId
+    start_x = row_one.StartX
+    start_y = row_one.StartY
+    end_x = row_one.EndX
+    end_y = row_one.EndY
+    start_date_time = row_one.StartDateTime
+    end_date_time = row_one.EndDateTime
+
+print ('x, y:', row_one.EndX, row_one.EndY)
+print ('row 1 trip id:', row_one.TripId)
+cursor.execute("select * from game.Trips where CarID = ? ORDER BY EndDateTime DESC", car_id)
+
+# End of trial block **********************************************************
 
 pygame.init()
 
+text_input_rect = pygame.Rect(200, 200, 140, 32)
 font = pygame.font.SysFont(None, 24)
 
 build_specification = BuildSpecification()
@@ -52,7 +93,7 @@ color_randomizer = RandomizeCarColor()
 # car_model = CarModel('', '', 0)
 car_color = color_randomizer.randomize_car_color()
 # random_car_model = car_model.randomize_car_model()
-car_list = CarList.randomize_model_list(self = '')
+car_list = car_a # CarList.randomize_model_list(self = '')
 
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 800
@@ -65,16 +106,25 @@ pygame.display.set_caption('Quick Start')
 
 window_surface = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-car_row = 0.5
-car_column = 3.5
+# while True:
+#     for event in pygame.event.get():
+#         if event.type == pygame.KEYDOWN:
+#             if event.key == pygame.K_BACKSPACE:
+#                 text_input = text_input
+
+car_row = row_one.EndY
+car_column = row_one.EndX
 #destination_row = 5.5
 #destination_column = 6.5
+
+destination_position = Position(0.5, 6.5)
 
 destinations = [
     (5.5, 6.5),
     (2.5, 1.5),
-    (6.5, 0.5)
+    (destination_position.x, destination_position.y),
 ]
+start_date_time = datetime(2025, 6, 29, 3, 15, 7)
 
 current_destination = 0
 destination_row, destination_column = destinations[current_destination]
@@ -326,3 +376,21 @@ while is_running:
     pygame.time.Clock().tick(60)
 
 pygame.quit()
+
+# Save the x, y to database
+#CarId, StartX, StartY, EndX, EndY, StartDateTime, EndDateTime
+car_id_insert = car_id
+start_x_insert = row_one.StartX
+start_y_insert = row_one.StartY
+end_x_insert = destination_position.x 
+end_y_insert = destination_position.y 
+end_date_time = datetime.now()
+print  ('Trip details: ' , car_id_insert, start_x_insert, start_y_insert, end_x_insert, end_y_insert, start_date_time, end_date_time)
+print(end_date_time)
+cursor.execute("insert into game.Trips (CarId, StartX, StartY, EndX, EndY, StartDateTime, EndDateTime)"
+               "values (?, ?, ?, ?, ?, ?, ?)",
+               (car_id_insert, start_x_insert, start_y_insert, end_x_insert, end_y_insert, start_date_time, end_date_time))
+conn.commit()
+cursor.close()
+conn.close()
+# end of saving

@@ -77,7 +77,7 @@ class CarColor():
 
 class RandomizeCarColor():
     def randomize_car_color(self):
-        color_options = [CarColor.BLUE, CarColor.RED, CarColor.GRAY, CarColor.WHITE]
+        color_options = [CarColor.BLUE, CarColor.RED] #, CarColor.GRAY, CarColor.WHITE]
         return random.choice(color_options)
 
 class CarList():
