@@ -117,12 +117,25 @@ car_column = row_one.EndX
 #destination_row = 5.5
 #destination_column = 6.5
 
-destination_position = Position(0.5, 6.5)
+x_1 = input("Please tell me the first x position?")
+print ('x_1: ', x_1)
+
+y_1 = input("Please tell me the first y position?")
+print ('y_1: ', y_1)
+
+destination_1 = Position(float(x_1), float(y_1))
+
+x_2 = input("Please tell me the second x position?")
+print ('x_2: ', x_2)
+
+y_2 = input("Please tell me the second y position?")
+print ('y_2: ', y_2)
+
+destination_2 = Position(float(x_2), float(y_2))
 
 destinations = [
-    (5.5, 6.5),
-    (2.5, 1.5),
-    (destination_position.x, destination_position.y),
+    (destination_1.x, destination_1.y),
+    (destination_2.x, destination_2.y)
 ]
 start_date_time = datetime(2025, 6, 29, 3, 15, 7)
 
@@ -158,6 +171,14 @@ button_y = SCREEN_HEIGHT - button_height - 40
 button_color = (CarColor.GRAY)
 button_text_color = (CarColor.BLACK)
 manual_pause = False
+
+show_save_button = False
+save_button_width = 100
+save_button_height = 40
+save_button_x = button_x + button_width + 20
+save_button_y = button_y
+save_button_color = CarColor.GRAY
+save_button_text_color = CarColor.BLACK
 
 manual_pause_start = 0
 total_manual_pause_duration = 0
@@ -253,7 +274,23 @@ while is_running:
                     else:
                         manual_pause_start = pygame.time.get_ticks()
                 manual_pause = not manual_pause
-    
+                show_save_button = manual_pause
+            if show_save_button:
+                if (save_button_x <= mouse_x <= save_button_x + save_button_width) and (save_button_y <= mouse_y <= save_button_y + save_button_height):
+                    current_x = car_column
+                    current_y = car_row
+                    current_time = datetime.now()
+                    cursor.execute("insert into game.Trips (CarId, StartX, StartY, EndX, EndY, StartDateTime, EndDateTime) "
+                           "values (?, ?, ?, ?, ?, ?, ?)",
+                           (car_id, row_one.StartX, row_one.StartY, current_x, current_y, start_date_time, current_time))
+                    conn.commit()
+                    print("Saved current position: ", current_x, current_y, "at", current_time)
+    if show_save_button:
+        pygame.draw.rect(window_surface, save_button_color, (save_button_x, save_button_y, save_button_width, save_button_height))
+        save_button_text = font.render('Save', True, save_button_text_color)
+        save_button_text_rect = save_button_text.get_rect(center=(save_button_x + save_button_width / 2, save_button_y + save_button_height / 2))
+        window_surface.blit(save_button_text, save_button_text_rect)
+
     # status_text = font.render("Status: " + status, True, (0, 0, 0))
     # direction_text = font.render("Direction: " + direction, True, (0, 0, 0))
     # window_surface.blit(status_text, (50, 50))
@@ -382,8 +419,8 @@ pygame.quit()
 car_id_insert = car_id
 start_x_insert = row_one.StartX
 start_y_insert = row_one.StartY
-end_x_insert = destination_position.x 
-end_y_insert = destination_position.y 
+end_x_insert = destination_1.x 
+end_y_insert = destination_1.y 
 end_date_time = datetime.now()
 print  ('Trip details: ' , car_id_insert, start_x_insert, start_y_insert, end_x_insert, end_y_insert, start_date_time, end_date_time)
 print(end_date_time)
