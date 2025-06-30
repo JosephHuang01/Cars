@@ -12,13 +12,12 @@
 import pyodbc
 print ('pyodbc ok!')
 
-import pygame
+import pygame, sys
 from factories.build_specification import BuildSpecification
 from components.car import CarColor, RandomizeCarColor, CarList, Car, Position
 from datetime import datetime
 
 #import pygame_gui
-
 
 # Begin of trial block *************************************************
 
@@ -81,12 +80,13 @@ print ('x, y:', row_one.EndX, row_one.EndY)
 print ('row 1 trip id:', row_one.TripId)
 cursor.execute("select * from game.Trips where CarID = ? ORDER BY EndDateTime DESC", car_id)
 
-# End of trial block **********************************************************
+# End of trial block **************************************************
 
 pygame.init()
 
 text_input_rect = pygame.Rect(200, 200, 140, 32)
 font = pygame.font.SysFont(None, 24)
+text_input = ''
 
 build_specification = BuildSpecification()
 color_randomizer = RandomizeCarColor()
@@ -106,11 +106,8 @@ pygame.display.set_caption('Quick Start')
 
 window_surface = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-# while True:
-#     for event in pygame.event.get():
-#         if event.type == pygame.KEYDOWN:
-#             if event.key == pygame.K_BACKSPACE:
-#                 text_input = text_input
+#text_box = pygame.display.set_mode([800, 200])
+active = False
 
 car_row = row_one.EndY
 car_column = row_one.EndX
@@ -285,11 +282,30 @@ while is_running:
                            (car_id, row_one.StartX, row_one.StartY, current_x, current_y, start_date_time, current_time))
                     conn.commit()
                     print("Saved current position: ", current_x, current_y, "at", current_time)
+        elif event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if text_input_rect.collidepoint(event.pos):
+                active = True
+            else:
+                active = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_BACKSPACE:
+                text_input = text_input[:-1]
+            else:
+                text_input += event.unicode
     if show_save_button:
         pygame.draw.rect(window_surface, save_button_color, (save_button_x, save_button_y, save_button_width, save_button_height))
         save_button_text = font.render('Save', True, save_button_text_color)
         save_button_text_rect = save_button_text.get_rect(center=(save_button_x + save_button_width / 2, save_button_y + save_button_height / 2))
         window_surface.blit(save_button_text, save_button_text_rect)
+    
+    pygame.draw.rect(window_surface, CarColor.WHITE, text_input_rect)
+    text_surface = font.render(text_input, True, CarColor.BLACK)
+    window_surface.blit(text_surface, (text_input_rect.x + 5, text_input_rect.y + 5))
+    text_input_rect.w = max(100, text_surface.get_width() + 10)
+    pygame.display.flip()
 
     # status_text = font.render("Status: " + status, True, (0, 0, 0))
     # direction_text = font.render("Direction: " + direction, True, (0, 0, 0))
