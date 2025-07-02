@@ -16,6 +16,10 @@ import pygame, sys
 from factories.build_specification import BuildSpecification
 from components.car import CarColor, RandomizeCarColor, CarList, Car, Position
 from datetime import datetime
+from database.car_explorer import CarExplorer
+
+car_explorer = CarExplorer()
+car_a = car_explorer.get_one_car()
 
 #import pygame_gui
 
@@ -69,8 +73,8 @@ print(row_one)
 
 if row_one:
     trip_id = row_one.TripId
-    start_x = row_one.StartX
-    start_y = row_one.StartY
+    start_x = row_one.StartY
+    start_y = row_one.StartX
     end_x = row_one.EndX
     end_y = row_one.EndY
     start_date_time = row_one.StartDateTime
@@ -137,7 +141,7 @@ destinations = [
 start_date_time = datetime(2025, 6, 29, 3, 15, 7)
 
 current_destination = 0
-destination_row, destination_column = destinations[current_destination]
+destination_column, destination_row = destinations[current_destination]
 
 pause_time = 2000
 is_paused = False
@@ -381,12 +385,12 @@ while is_running:
                 pause_start = pygame.time.get_ticks()
                 is_waiting = True
                 total_manual_pause_duration = 0
-                reached_destinations.append((destination_row, destination_column))
+                reached_destinations.append((destination_column, destination_row))
         elif status == 'Arrived' and is_waiting:
             if pygame.time.get_ticks() - pause_start - total_manual_pause_duration >= pause_time:
                 current_destination += 1
                 if current_destination < len(destinations):
-                    destination_row, destination_column = destinations[current_destination]
+                    destination_column, destination_row = destinations[current_destination]
                     status = 'Driving'
                     is_waiting = False
                 else:
