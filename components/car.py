@@ -1,6 +1,7 @@
 from components.coordinate_direction import CoordinateDirection
 from components.driving_direction import DrivingDirection
 from components.city_map import CityMap
+from components.position import Position
 import random
 
 class Car():
@@ -54,11 +55,6 @@ class Car():
         speed += (acceleration_rate * 10)
         if speed == self.max_speed:
             speed
-
-class Position():
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
 
 class Seat():
     def __init__(self, number):
