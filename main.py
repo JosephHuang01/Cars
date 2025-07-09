@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame
 from components.car import CarColor, RandomizeCarColor, Position
 from datetime import datetime
 from database.car_explorer import CarExplorer
