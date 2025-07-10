@@ -34,5 +34,5 @@ class Map():
         text_rect = text_surface.get_rect(center=(position.x + width/2, position.y + height/2))
         self.surface.blit(text_surface, text_rect)
 
-    def blit(self):
+    def show(self):
         self.screen.blit(self.surface, self.rect)

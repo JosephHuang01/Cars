@@ -23,10 +23,8 @@ def run_game():
         
         grid_map.surface.fill((128, 128, 128))
         grid_map.show_cities()
-        for city in grid_map.cities:
-            grid_map.draw_text_on_rectangle(city.name, city.position, city.width, city.length)
-
-        grid_map.blit()
+       
+        grid_map.show()
         pygame.display.flip()
 
 run_game()
