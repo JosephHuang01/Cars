@@ -31,7 +31,7 @@ class Map():
 
     def draw_text_on_rectangle(self, text, position, width, height):
         text_surface = self.font.render(text, True, (0, 0, 0))
-        text_rect = text_surface.get_rect(center=(position.x + self.cell_size/2, position.y + self.cell_size/2))
+        text_rect = text_surface.get_rect(center=(position.x + width/2, position.y + height/2))
         self.surface.blit(text_surface, text_rect)
 
     def blit(self):

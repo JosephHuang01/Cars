@@ -1,23 +1,54 @@
+import pygame
 import pyodbc
-print ('pyodbc ok!')
-
-import sys
-from datetime import datetime, timedelta
 from components.car import Car, Position
 
-class CarExplorer():
-    def __init__(self):
-        self.conn = self.__get_connection()
+class CarNavigation():
+    def __init__(self, ai_settings, screen):
+        self.screen = screen
+        self.ai_settings = ai_settings
+    
+        self.image = pygame.Surface((20, 8))
+        self.image.fill((0, 0, 0))
+        self.rect = self.image.get_rect()
+        self.screen_rect = screen.get_rect()
 
+        self.rect.centerx = self.screen_rect.centerx
+        self.rect.centery = self.screen_rect.centery
+
+        self.centerx = float(self.rect.centerx)
+        self.centery = float(self.rect.centery)
+
+        self.moving_right = False
+        self.moving_left = False
+        self.moving_up = False
+        self.moving_down = False
+
+        self.direction = 'RIGHT'
+        self.angle = 0
+
+        self.conn = self.__get_connection()
+    
+    def update(self):
+        if self.moving_right and self.rect.right < self.screen_rect.right:
+            self.centerx += self.ai_settings.car_explorer_speed_factor
+        if self.moving_left and self.rect.left > 0:
+            self.centerx -= self.ai_settings.car_explorer_speed_factor
+        if self.moving_up and self.rect.top > 0:
+            self.centery -= self.ai_settings.car_explorer_speed_factor
+        if self.moving_down and self.rect.bottom < self.screen_rect.bottom:
+            self.centery += self.ai_settings.car_explorer_speed_factor
+        
+        self.rect.centerx = self.centerx
+        self.rect.centery = self.centery
+    
+    def blitme(self):
+        self.screen.blit(self.image, self.rect)
+            
     def __get_connection(self):
-        # Connect to SQL Server
         conn = pyodbc.connect(
             'DRIVER={ODBC Driver 17 for SQL Server};'
-            'SERVER=localhost;'      # e.g., 'localhost\\SQLEXPRESS' or '192.168.1.100'
-            'DATABASE=CarExplorer;'  # e.g., 'insurance_db'
-            #'UID=YOUR_USERNAME;'            # If using SQL Auth (not needed for Windows Auth)
-            #'PWD=YOUR_PASSWORD;'            # If using SQL Auth
-            # For Windows Authentication:
+            'SERVER=localhost;'
+            'DATABASE=CarExplorer;'
             'Trusted_Connection=yes;'
         )
         return conn
@@ -55,7 +86,6 @@ class CarExplorer():
     
     def save_trip(self, car_id, start_position_x, start_position_y, end_position_x, end_position_y, start_date, end_date):
         cursor = self.conn.cursor()
-        #end_date = start_date + timedelta(minutes=3)
         cursor.execute("insert into game.Trips (CarId, StartX, StartY, EndX, EndY, StartDateTime, EndDateTime)"
                "values (?, ?, ?, ?, ?, ?, ?)",
                (car_id, start_position_x, start_position_y, end_position_x, end_position_y, start_date, end_date))
