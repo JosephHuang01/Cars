@@ -1,7 +1,8 @@
 import pygame
 from components.city import City
+from components.shape import Shape
 
-class Map():
+class Map(Shape):
     def __init__(self, screen):
         self.grid_size = 8
         self.margin = 10
@@ -12,7 +13,7 @@ class Map():
         total_height = self.grid_size * self.cell_size + (self.grid_size - 1) * self.margin
         self.surface = pygame.Surface((total_width, total_height))
 
-        self.font = pygame.font.SysFont(None, 24)
+        self.font = pygame.font.SysFont(None, 18)
         self.offset_x = 50
         self.offset_y = 50
         self.rect = self.surface.get_rect(topleft = (self.offset_x, self.offset_y))
@@ -25,6 +26,7 @@ class Map():
     def show_cities(self):
         for city in self.cities:
             city.show()
+            #Shape.show(self)
 
     def draw_rectangle(self, name, position, width, height):
         pygame.draw.rect(self.surface, (0, 128, 0), (position.x, position.y, width, height))
@@ -33,6 +35,7 @@ class Map():
         text_surface = self.font.render(text, True, (0, 0, 0))
         text_rect = text_surface.get_rect(center=(position.x + width/2, position.y + height/2))
         self.surface.blit(text_surface, text_rect)
+        #self.screen.blit(text_surface, text_rect)
 
     def show(self):
         self.screen.blit(self.surface, self.rect)

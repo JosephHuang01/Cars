@@ -1,6 +1,7 @@
 from components.position import Position
+from components.shape import Shape
 
-class City():
+class City(Shape):
     def __init__(self, name, x, y, map):
         self.name = name
         self.position = Position(x, y)
@@ -17,3 +18,5 @@ class City():
     def show(self):
         self.map_grid.draw_rectangle(self.name, self.position, self.width, self.length)
         self.map_grid.draw_text_on_rectangle(self.name, self.position, self.width, self.length)
+        #Shape.draw_rectangle(self.name, self.position, self.width, self.length)
+        #Shape.draw_text_on_rectangle(self.name, self.position, self.width, self.length)
