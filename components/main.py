@@ -1,6 +1,6 @@
 import pygame
 from factories.build_specification import BuildSpecification
-from components.car import CarColor, RandomizeCarColor
+from components.car import CommonGameColor, RandomizeCarColor
 #import pygame_gui
 
 # todo: move this to main.py in the root folder
@@ -43,7 +43,7 @@ while is_running:
     ]
 
     pygame.draw.polygon(window_surface, build_specification.color_list[2], player)
-    pygame.draw.polygon(window_surface, CarColor.RED, player)
+    pygame.draw.polygon(window_surface, CommonGameColor.RED, player)
 
     pygame.draw.circle(window_surface, (50, 50, 50), (car_x + 25, car_y + 10), 15)
     pygame.draw.circle(window_surface, (50, 50, 50), (car_x + 95, car_y + 10), 15)

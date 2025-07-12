@@ -1,4 +1,4 @@
-from components.car import CarColor
+from components.car import CommonGameColor
 
 class BuildSpecification():
     def __init__(self):
@@ -8,4 +8,4 @@ class BuildSpecification():
         self.gas_tank_capacity = 0
         self.battery_capacity = 0
         self.color_list = [(0, 0, 0), (179, 0, 0), (173, 216, 230)]
-        self.car_color = CarColor.RED
+        self.car_color = CommonGameColor.RED
