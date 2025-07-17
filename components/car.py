@@ -3,11 +3,22 @@
 # from components.city_map import CityMap
 # from components.position import Position
 # import random
-from components.shape import Shape
+from components.shape import Shape, ShapeSpecification
+from components.position import Position
+from components.common_game_color import CommonGameColor
 
 class Car(Shape):
-    def __init__(self, screen, pygame, name, type, position, width, length):
-        super().__init__(screen, pygame, name, type, position, width, length)
+    def __init__(self, screen, pygame, shape_spec):
+        super().__init__(screen, pygame, shape_spec)
+    
+    def get_car(self):
+        return [Car(self.screen, self.pygame, ShapeSpecification('', 'car', Position(700, 200), 24, 8,
+                                                                  CommonGameColor.GREEN, CommonGameColor.WHITE)),
+                Car(self.screen, self.pygame, ShapeSpecification('', 'car', Position(300, 700), 24, 8,
+                                                                  CommonGameColor.BLUE, CommonGameColor.BLACK))]
+    def show(self):
+        super().show()
+        self.draw_text_on_rectangle(self.name, self.position, self.width, self.length)
 
         # self.car_id = 0
         # self.make = make
