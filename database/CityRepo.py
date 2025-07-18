@@ -1,6 +1,9 @@
-import pyodbc
-from components.shape import ShapeSpecification
 from components.position import Position
+from components.shape import ShapeSpecification
+
+
+import pyodbc
+
 
 class CityRepo():
     def __init__(self):
@@ -15,7 +18,7 @@ class CityRepo():
         )
         return conn
 
-    def get_city_specs(self):
+    def get_specs(self):
         city_specs = []
         cursor = self.conn.cursor()
         cursor.execute("select * from game.Cities")
@@ -24,7 +27,7 @@ class CityRepo():
             # background_color = [int(x) for x in row.BackgroundColor.split(',')]
             foreground_color = tuple(int(x) for x in row.ForegroundColor.split(','))
             background_color = tuple(int(x) for x in row.BackgroundColor.split(','))
-            
+
             city_shape_spec = ShapeSpecification(
                 # row.Name,
                 # row.Type,
@@ -56,5 +59,3 @@ class CityRepo():
             city_specs.append(city_shape_spec)
         #self.conn.commit()
         return city_specs
-
-    #def add_cities(self, CityID, ScreenWidth, ScreenLength, Pygame, Name, Type, PositionX, PositionY, BackgroundColor, Foreground Color):

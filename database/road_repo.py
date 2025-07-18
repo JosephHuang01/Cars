@@ -15,7 +15,7 @@ class RoadRepo():
         )
         return conn
     
-    def get_road_specs(self):
+    def get_specs(self):
         road_specs = []
         cursor = self.conn.cursor()
         cursor.execute("select * from game.Roads")

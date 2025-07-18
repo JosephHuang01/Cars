@@ -1,6 +1,6 @@
 from components.shape import Shape, ShapeSpecification
 from components.map import Map
-from database.city_repo import CityRepo
+from database.CityRepo import CityRepo
 from components.city import City
 from components.position import Position
 from database.road_repo import RoadRepo
@@ -24,14 +24,14 @@ class Builder():
         self.grid_map = Map(self.screen, self.pygame, shape_spec_map)
         self.grid_map.center_position()
 
-        city_specs = CityRepo().get_city_specs()
+        city_specs = CityRepo().get_specs()
         cities = [] # CityRepo(screen, pygame).get_cities()
         for city_spec in city_specs:
             cities.append(City(self.screen, self.pygame, city_spec))
         for city in cities:
             self.grid_map.add_city(city)
 
-        road_specs = RoadRepo().get_road_specs()
+        road_specs = RoadRepo().get_specs()
         roads = []
         for road_spec in road_specs:
             roads.append(Road(self.screen, self.pygame, road_spec))

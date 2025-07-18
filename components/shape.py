@@ -6,8 +6,8 @@ class ShapeSpecification():
         self.name = ''
         self.type = 'shape'
         self.position = Position(0,0)
-        self.width = 50
-        self.length = 50
+        self.width = 0
+        self.length = 0
         self.bg_color = CommonGameColor.GRAY
         self.fg_color = CommonGameColor.BLACK
 
