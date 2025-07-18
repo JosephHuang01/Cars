@@ -1,6 +1,4 @@
 from components.shape import Shape, ShapeSpecification
-from components.position import Position
-from components.common_game_color import CommonGameColor
 
 class City(Shape):
     def __init__(self, screen, pygame, shape_spec):

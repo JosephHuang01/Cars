@@ -5,6 +5,7 @@ class Map(Shape):
         super().__init__(screen, pygame, shape_spec)
         self.cities = []
         self.cars = []
+        self.roads = []
     
     def add_city(self, city):
         self.cities.append(city)
@@ -19,3 +20,10 @@ class Map(Shape):
     def show_cars(self):
         for car in self.cars:
             car.show()
+    
+    def add_road(self, road):
+        self.roads.append(road)
+    
+    def show_roads(self):
+        for road in self.roads:
+            road.show()

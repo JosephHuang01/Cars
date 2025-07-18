@@ -23,7 +23,7 @@ class Shape():
         self.bg_color = shape_spec.bg_color
         self.fg_color = shape_spec.fg_color
         self.drawing_points = []
-        self.font = pygame.font.SysFont(None, 18)
+        self.font = pygame.font.SysFont(None, 15)
         self.screen_size = self.screen.get_size()
 
     # def __init__(self, screen, pygame, name, type, position, width, length, bg_color, fg_color):

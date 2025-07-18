@@ -1,13 +1,10 @@
 import pyodbc
-from components.city import City
 from components.shape import ShapeSpecification
 from components.position import Position
 
 class CityRepo():
-    def __init__(self, screen, pygame):
+    def __init__(self):
         self.conn = self.__get_connection()
-        self.screen = screen
-        self.pygame = pygame
 
     def __get_connection(self):
         conn = pyodbc.connect(
@@ -17,9 +14,9 @@ class CityRepo():
             'Trusted_Connection=yes;'
         )
         return conn
-    
-    def get_cities(self):
-        cities = []
+
+    def get_city_specs(self):
+        city_specs = []
         cursor = self.conn.cursor()
         cursor.execute("select * from game.Cities")
         for row in cursor.fetchall():
@@ -28,7 +25,7 @@ class CityRepo():
             foreground_color = tuple(int(x) for x in row.ForegroundColor.split(','))
             background_color = tuple(int(x) for x in row.BackgroundColor.split(','))
             
-            shape_spec = ShapeSpecification(
+            city_shape_spec = ShapeSpecification(
                 # row.Name,
                 # row.Type,
                 # Position(row.PositionX, row.PositionY),
@@ -37,14 +34,14 @@ class CityRepo():
                 # foreground_color,
                 # background_color
                 )
-            shape_spec.name = row.Name
-            shape_spec.type = row.Type
-            shape_spec.position = Position(row.PositionX, row.PositionY)
-            shape_spec.width = row.Width
-            shape_spec.length = row.Length
-            shape_spec.bg_color = background_color
-            shape_spec.fg_color = foreground_color
-            city1 = City(self.screen, self.pygame, shape_spec)
+            city_shape_spec.name = row.Name
+            city_shape_spec.type = row.Type
+            city_shape_spec.position = Position(row.PositionX, row.PositionY)
+            city_shape_spec.width = row.Width
+            city_shape_spec.length = row.Length
+            city_shape_spec.bg_color = background_color
+            city_shape_spec.fg_color = foreground_color
+            #city_spec = City(self.screen, self.pygame, shape_spec)
             # city = {
             #     'CityID': row.CityID,
             #     'Width': row.Width,
@@ -56,8 +53,8 @@ class CityRepo():
             #     'BackgroundColor': row.BackgroundColor,
             #     'ForegroundColor': row.ForegroundColor
             # }
-            cities.append(city1)
+            city_specs.append(city_shape_spec)
         #self.conn.commit()
-        return cities
+        return city_specs
 
     #def add_cities(self, CityID, ScreenWidth, ScreenLength, Pygame, Name, Type, PositionX, PositionY, BackgroundColor, Foreground Color):
