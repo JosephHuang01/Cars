@@ -1,22 +1,10 @@
+from database.base_repo import BaseRepo
 from components.position import Position
 from components.shape import ShapeSpecification
 
-
-import pyodbc
-
-
-class CityRepo():
+class CityRepo(BaseRepo):
     def __init__(self):
-        self.conn = self.__get_connection()
-
-    def __get_connection(self):
-        conn = pyodbc.connect(
-            'DRIVER={ODBC Driver 17 for SQL Server};'
-            'SERVER=localhost;'
-            'DATABASE=CarExplorer;'
-            'Trusted_Connection=yes;'
-        )
-        return conn
+        super().__init__()
 
     def get_specs(self):
         city_specs = []

@@ -6,19 +6,45 @@
 from components.shape import Shape, ShapeSpecification
 from components.position import Position
 from components.common_game_color import CommonGameColor
+from components.driving_direction import DrivingDirection
+from components.coordinate_direction import CoordinateDirection
 
 class Car(Shape):
     def __init__(self, screen, pygame, shape_spec):
         super().__init__(screen, pygame, shape_spec)
+        self.position = shape_spec.position
+        self.direction = DrivingDirection.FORWARD
+        self.coordinate_direction = CoordinateDirection()
+
+        self.moving_right = False
+        self.moving_left = False
+        self.moving_up = False
+        self.moving_down = False
+
     
     def get_car(self):
-        return [Car(self.screen, self.pygame, ShapeSpecification('', 'car', Position(700, 200), 24, 8,
-                                                                  CommonGameColor.GREEN, CommonGameColor.WHITE)),
-                Car(self.screen, self.pygame, ShapeSpecification('', 'car', Position(300, 700), 24, 8,
-                                                                  CommonGameColor.BLUE, CommonGameColor.BLACK))]
+        return [Car(self.screen, self.pygame, ShapeSpecification())]
+        # return [Car(self.screen, self.pygame, ShapeSpecification('', 'car', Position(700, 200), 24, 8,
+        #                                                           CommonGameColor.GREEN, CommonGameColor.WHITE)),
+        #         Car(self.screen, self.pygame, ShapeSpecification('', 'car', Position(300, 700), 24, 8,
+        #                                                           CommonGameColor.BLUE, CommonGameColor.BLACK))]
     def show(self):
         super().show()
         self.draw_text_on_rectangle(self.name, self.position, self.width, self.length)
+    
+    def drive(self, direction, speed):
+        self.direction = direction        
+        self.coordinate_direction.set_present_coordinate_direction(direction)
+
+        if direction == DrivingDirection.FORWARD:
+            self.position.y += speed
+        elif direction == DrivingDirection.LEFT:
+            self.position.x -= speed
+        elif direction == DrivingDirection.BACKWARD:
+            self.position.y -= speed
+        elif direction == DrivingDirection.RIGHT:
+            self.position.x += speed
+
 
         # self.car_id = 0
         # self.make = make
@@ -36,19 +62,19 @@ class Car(Shape):
     # todo: change to y plus and add more constants to coordincation class
     # todo: Add x and y calcuation to drive method below and unit tests 
 
-#     def drive(self, direction, distance):
-#         self.direction = direction        
-#         self.__increment_odometer(distance)
-#         self.set_present_coordinate_direction.set_present_coordinate_direction(direction)
+    def drive(self, direction, distance):
+        self.direction = direction        
+        # self.__increment_odometer(distance)
+        # self.set_present_coordinate_direction.set_present_coordinate_direction(direction)
 
-#         if direction == DrivingDirection.FORWARD:
-#             self.position.y += distance
-#         elif direction == DrivingDirection.LEFT:
-#             self.position.x -= distance
-#         elif direction == DrivingDirection.BACKWARD:
-#             self.position.y -= distance
-#         elif direction == DrivingDirection.RIGHT:
-#             self.position.x += distance
+        if direction == DrivingDirection.FORWARD:
+            self.position.y += distance
+        elif direction == DrivingDirection.LEFT:
+            self.position.x -= distance
+        elif direction == DrivingDirection.BACKWARD:
+            self.position.y -= distance
+        elif direction == DrivingDirection.RIGHT:
+            self.position.x += distance
 
 #     def get_descriptive_name(self):
 #         long_name = str(self.year) + ' ' + self.make + ' ' + self.model

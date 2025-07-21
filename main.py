@@ -1,6 +1,9 @@
 import pygame
 from components.settings import Settings
 from services.builder import Builder
+from components.game_functions_2 import GameFunctions
+from database.car_repo import CarRepo
+from components.driving_direction import DrivingDirection
 
 def run_game():
     pygame.init()
@@ -10,6 +13,7 @@ def run_game():
     pygame.display.set_caption('Quick Start')
     builder = Builder(screen, pygame)
     builder.build()
+    car_explorer = builder.cars[0]
 
     #__cityReference = City(screen, pygame, shape_spec)
     #car_reference = Car(screen, pygame, shape_spec)
@@ -23,13 +27,20 @@ def run_game():
     #                    , CommonGameColor.WHITE, (255, 255, 255))
 
     running = True
+    clock = pygame.time.Clock()
 
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+        screen.fill((0, 0, 0))
+
+        for car in builder.cars:
+            if car.position.x < ai_settings.screen_width:
+                car.drive(DrivingDirection.RIGHT, 1)
         
         builder.show()
+        GameFunctions.check_events(car_explorer)
         #grid_map.surface.fill((0,0,0))
         
         #demo_shape.draw_rectangle(demo_shape.name, center_position, __cityReference.width, __cityReference.length)
@@ -37,5 +48,6 @@ def run_game():
         #demo_shape.show()
 
         pygame.display.flip()
+        clock.tick(60)
 
 run_game()
