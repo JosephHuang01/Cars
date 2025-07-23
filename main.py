@@ -4,6 +4,7 @@ from services.builder import Builder
 from components.game_functions_2 import GameFunctions
 from database.car_repo import CarRepo
 from components.driving_direction import DrivingDirection
+from services.driving import Driving
 
 def run_game():
     pygame.init()
@@ -14,6 +15,7 @@ def run_game():
     builder = Builder(screen, pygame)
     builder.build()
     car_explorer = builder.cars[0]
+    driving = Driving(screen, pygame)
 
     #__cityReference = City(screen, pygame, shape_spec)
     #car_reference = Car(screen, pygame, shape_spec)
@@ -33,6 +35,7 @@ def run_game():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+
         screen.fill((0, 0, 0))
 
         for car in builder.cars:
@@ -40,7 +43,11 @@ def run_game():
                 car.drive(DrivingDirection.RIGHT, 1)
         
         builder.show()
-        GameFunctions.check_events(car_explorer)
+        #GameFunctions.check_events(car_explorer)
+        Driving.update(car_explorer)
+        for road in builder.grid_map.roads:
+            if driving.is_inside_shape(road):
+                print("The car is on the road!")
         #grid_map.surface.fill((0,0,0))
         
         #demo_shape.draw_rectangle(demo_shape.name, center_position, __cityReference.width, __cityReference.length)

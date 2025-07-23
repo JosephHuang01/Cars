@@ -8,6 +8,7 @@ from components.position import Position
 from components.common_game_color import CommonGameColor
 from components.driving_direction import DrivingDirection
 from components.coordinate_direction import CoordinateDirection
+from components.settings import Settings
 
 class Car(Shape):
     def __init__(self, screen, pygame, shape_spec):
@@ -15,35 +16,118 @@ class Car(Shape):
         self.position = shape_spec.position
         self.direction = DrivingDirection.FORWARD
         self.coordinate_direction = CoordinateDirection()
+        self.destination = []
+        self.ai_settings = Settings()
+        self.rotation = 0
 
         self.moving_right = False
         self.moving_left = False
         self.moving_up = False
         self.moving_down = False
 
-    
     def get_car(self):
         return [Car(self.screen, self.pygame, ShapeSpecification())]
         # return [Car(self.screen, self.pygame, ShapeSpecification('', 'car', Position(700, 200), 24, 8,
         #                                                           CommonGameColor.GREEN, CommonGameColor.WHITE)),
         #         Car(self.screen, self.pygame, ShapeSpecification('', 'car', Position(300, 700), 24, 8,
         #                                                           CommonGameColor.BLUE, CommonGameColor.BLACK))]
+
+    def drive(self, direction, distance):
+        self.direction = direction
+        # self.__increment_odometer(distance)
+        # self.set_present_coordinate_direction.set_present_coordinate_direction(direction)
+
+        if direction == DrivingDirection.FORWARD:
+            self.position.y += distance
+        elif direction == DrivingDirection.LEFT:
+            self.position.x -= distance
+        elif direction == DrivingDirection.BACKWARD:
+            self.position.y -= distance
+        elif direction == DrivingDirection.RIGHT:
+            self.position.x += distance
+    
+    def set_destination(self, position):
+        self.destination = None
+    
+    def update(self):
+        # move_x = self.destination.x - self.position.x
+        # move_y = self.destination.y - self.position.y
+
+        # if abs(move_x) < self.ai_settings.car_explorer_speed_factor and abs(move_y) < self.ai_settings.car_explorer_speed_factor:
+        #     self.position = Position(self.destination.x, self.destination.y)
+        
+        # if move_x > 0:
+        #     self.position.x += self.ai_settings.car_explorer_speed_factor
+        #     self.angle = 0
+        
+        # if move_x < 0:
+        #     self.position.x -= self.ai_settings.car_explorer_speed_factor
+        #     self.angle = 180
+        
+        # if move_y > 0:
+        #     self.position.y += self.ai_settings.car_explorer_speed_factor
+        #     self.angle = 90
+        
+        # if move_y < 0:
+        #     self.position.y -= self.ai_settings.car_explorer_speed_factor
+        #     self.angle = 270
+        # if self.destination is not None:
+        #     move_x = self.destination.x - self.position.x
+        #     move_y = self.destination.y - self.position.y
+
+        # distance_squared = move_x * move_x + move_y * move_y
+        # if distance_squared > 1:
+        #     step = 2
+
+        #     ratio = step / (distance_squared ** 0.5)
+        #     move_x = move_x * ratio
+        #     move_y = move_y * ratio
+
+        #     self.position.x += move_x
+        #     self.position.y += move_y
+
+        #     if abs(move_x) > abs(move_y):
+        #         self.rotation = 0 if move_x > 0 else 180
+        #     else:
+        #         self.rotation = 90 if move_y < 0 else 270
+        
+        if self.destination:
+            move_x = self.destination.x - self.position.x
+            move_y = self.destination.y - self.position.y
+
+        step = 1
+
+        if move_x != 0:
+            self.position.x += step if move_x > 0 else -step
+            self.rotation = 270 if move_x > 0 else 90
+
+        if move_y != 0:
+            self.position.y += step if move_y > 0 else -step
+            self.rotation = 0 if move_y > 0 else 180
+
     def show(self):
         super().show()
         self.draw_text_on_rectangle(self.name, self.position, self.width, self.length)
-    
-    def drive(self, direction, speed):
-        self.direction = direction        
-        self.coordinate_direction.set_present_coordinate_direction(direction)
+        car_surface = self.pygame.Surface((self.width, self.length), self.pygame.SRCALPHA)
+        car_surface.fill(self.bg_color)
 
-        if direction == DrivingDirection.FORWARD:
-            self.position.y += speed
-        elif direction == DrivingDirection.LEFT:
-            self.position.x -= speed
-        elif direction == DrivingDirection.BACKWARD:
-            self.position.y -= speed
-        elif direction == DrivingDirection.RIGHT:
-            self.position.x += speed
+        rotated_surface = self.pygame.transform.rotate(car_surface, self.rotation)
+        rotated_rect = rotated_surface.get_rect(center=(self.position.x, self.position.y))
+
+        #self.screen.blit(rotated_surface, rotated_rect)
+    
+    # def drive(self, direction, speed):
+    #     self.direction = direction        
+    #     self.coordinate_direction.set_present_coordinate_direction(direction)
+
+    #     if direction == DrivingDirection.FORWARD:
+    #         self.position.y += speed
+    #     elif direction == DrivingDirection.LEFT:
+    #         self.position.x -= speed
+    #     elif direction == DrivingDirection.BACKWARD:
+    #         self.position.y -= speed
+    #     elif direction == DrivingDirection.RIGHT:
+    #         self.position.x += speed
 
 
         # self.car_id = 0
@@ -61,20 +145,6 @@ class Car(Shape):
 
     # todo: change to y plus and add more constants to coordincation class
     # todo: Add x and y calcuation to drive method below and unit tests 
-
-    def drive(self, direction, distance):
-        self.direction = direction        
-        # self.__increment_odometer(distance)
-        # self.set_present_coordinate_direction.set_present_coordinate_direction(direction)
-
-        if direction == DrivingDirection.FORWARD:
-            self.position.y += distance
-        elif direction == DrivingDirection.LEFT:
-            self.position.x -= distance
-        elif direction == DrivingDirection.BACKWARD:
-            self.position.y -= distance
-        elif direction == DrivingDirection.RIGHT:
-            self.position.x += distance
 
 #     def get_descriptive_name(self):
 #         long_name = str(self.year) + ' ' + self.make + ' ' + self.model

@@ -1,6 +1,5 @@
 import sys
 import pygame
-from components.map import Map
 from components.driving_direction import DrivingDirection
 
 class GameFunctions():
@@ -39,12 +38,16 @@ class GameFunctions():
         #if car_explorer.moving_right and car_column < grid.grid_size - 1:
         if car_explorer.moving_right:
                 car_explorer.drive(DrivingDirection.RIGHT, 1)
+                car_explorer.angle = 0
         elif car_explorer.moving_left:
                 car_explorer.drive(DrivingDirection.LEFT, 1)
+                car_explorer.angle = 180
         elif car_explorer.moving_up:
                 car_explorer.drive(DrivingDirection.FORWARD, 1)
+                car_explorer.angle = 90
         elif car_explorer.moving_down:
                 car_explorer.drive(DrivingDirection.BACKWARD, 1)
+                car_explorer.angle = 270
                 # car_column += 1
                 # car_explorer.moving_right = False
                 # car_explorer.direction = 'RIGHT'

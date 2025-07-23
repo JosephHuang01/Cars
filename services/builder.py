@@ -48,6 +48,12 @@ class Builder():
             self.grid_map.add_car(car)
         
         self.cars = cars
+        for car in cars:
+            car.set_destination(Position(200, 200))
+
+        # self.cars[0].set_destination(Position(200, 200))
+        # self.cars[0].update()
+        # self.cars[0].show()
 
         #self.demo_shape = Shape(self.screen, self.pygame, ShapeSpecification())
         # self.demo_shape.drawing_points = [Position(125, 125), Position(650, 650), Position(650, 125), Position(125, 125)]
