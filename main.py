@@ -1,11 +1,8 @@
 import pygame
 from components.settings import Settings
 from services.builder import Builder
-from components.game_functions_2 import GameFunctions
-from database.car_repo import CarRepo
-from components.driving_direction import DrivingDirection
-from services.driving import Driving
-
+from services.driving import SelfDrivingCar
+from components.position import Position
 def run_game():
     pygame.init()
     ai_settings = Settings()
@@ -14,19 +11,27 @@ def run_game():
     pygame.display.set_caption('Quick Start')
     builder = Builder(screen, pygame)
     builder.build()
-    car_explorer = builder.cars[0]
-    driving = Driving(screen, pygame)
 
-    #__cityReference = City(screen, pygame, shape_spec)
-    #car_reference = Car(screen, pygame, shape_spec)
-    # for city in __cityReference.get_popular_cities():
-    #     grid_map.add_city(city)
-    # for car in car_reference.get_car():
-    #     grid_map.add_car(car)
+    first_car = builder.cars[0]
+    self_driving_car = SelfDrivingCar(first_car)
+    starting_position = Position(100, 100)
+    ending_position = Position(300, 400)
+    self_driving_car.set_start_position(starting_position)
+    self_driving_car.add_destination(ending_position)
 
-    #new_position = Position(250, 250)
-    # demo_shape = Shape(screen, pygame, 'demo', 'shape', new_position, 150, 150
-    #                    , CommonGameColor.WHITE, (255, 255, 255))
+    second_car = builder.cars[1]
+    alternative_self_driving_car = SelfDrivingCar(second_car)
+    second_starting_position = Position(600, 600)
+    second_ending_position = Position(700, 400)
+    alternative_self_driving_car.set_start_position(second_starting_position)
+    alternative_self_driving_car.add_destination(second_ending_position)
+
+    third_car = builder.cars[2]
+    final_self_driving_car = SelfDrivingCar(third_car)
+    third_starting_position = Position(1460, 675)
+    third_ending_position = Position(1200, 400)
+    final_self_driving_car.set_start_position(third_starting_position)
+    final_self_driving_car.add_destination(third_ending_position)
 
     running = True
     clock = pygame.time.Clock()
@@ -36,23 +41,10 @@ def run_game():
             if event.type == pygame.QUIT:
                 running = False
 
-        screen.fill((0, 0, 0))
-
-        for car in builder.cars:
-            if car.position.x < ai_settings.screen_width:
-                car.drive(DrivingDirection.RIGHT, 1)
-        
+        self_driving_car.drive()
+        alternative_self_driving_car.drive()
+        final_self_driving_car.drive()
         builder.show()
-        #GameFunctions.check_events(car_explorer)
-        Driving.update(car_explorer)
-        for road in builder.grid_map.roads:
-            if driving.is_inside_shape(road):
-                print("The car is on the road!")
-        #grid_map.surface.fill((0,0,0))
-        
-        #demo_shape.draw_rectangle(demo_shape.name, center_position, __cityReference.width, __cityReference.length)
-        #demo_shape.draw_text_on_rectangle(demo_shape.name, center_position, __cityReference.width, __cityReference.length)
-        #demo_shape.show()
 
         pygame.display.flip()
         clock.tick(60)

@@ -1,8 +1,7 @@
-from components.shape import Shape, ShapeSpecification
+from components.shape import ShapeSpecification
 from components.map import Map
 from database.city_repo import CityRepo
 from components.city import City
-from components.position import Position
 from database.road_repo import RoadRepo
 from components.road import Road
 from database.car_repo import CarRepo
@@ -13,9 +12,9 @@ class Builder():
         self.screen = screen
         self.pygame = pygame
         self.screen_size = self.screen.get_size()
+        self.cars = []
 
     def build(self):
-        #ai_settings = Settings()
         shape_spec_map = ShapeSpecification()
         shape_spec_map.name = 'Game Map'
         shape_spec_map.type = 'map'
@@ -41,27 +40,13 @@ class Builder():
             self.grid_map.add_road(road)
 
         car_specs = CarRepo().get_specs()
-        cars = []
+        self.cars = []
         for car_spec in car_specs:
-            cars.append(Car(self.screen, self.pygame, car_spec))
-        for car in cars:
+            self.cars.append(Car(self.screen, self.pygame, car_spec))
+        for car in self.cars:
             self.grid_map.add_car(car)
-        
-        self.cars = cars
-        for car in cars:
-            car.set_destination(Position(200, 200))
-
-        # self.cars[0].set_destination(Position(200, 200))
-        # self.cars[0].update()
-        # self.cars[0].show()
-
-        #self.demo_shape = Shape(self.screen, self.pygame, ShapeSpecification())
-        # self.demo_shape.drawing_points = [Position(125, 125), Position(650, 650), Position(650, 125), Position(125, 125)]
-        #self.demo_shape.drawing_points = [Position(700, 400), Position(800, 500), Position(750, 600), Position(650, 600)
-                                     #, Position(600, 500), Position(700, 400)]
-        # self.demo_shape.drawing_points = [Position(75, 125), Position(75, 375), Position(100, 375), Position(100, 125)
-        #                                   , Position(75, 125)]
-        #self.demo_car = Shape(self.screen, self.pygame, ShapeSpecification())
+    
+    
 
     def show(self):
         self.grid_map.show()
