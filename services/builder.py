@@ -13,6 +13,7 @@ class Builder():
         self.pygame = pygame
         self.screen_size = self.screen.get_size()
         self.cars = []
+        self.roads = []
 
     def build(self):
         shape_spec_map = ShapeSpecification()
@@ -46,8 +47,6 @@ class Builder():
         for car in self.cars:
             self.grid_map.add_car(car)
     
-    
-
     def show(self):
         self.grid_map.show()
         self.grid_map.show_cities()

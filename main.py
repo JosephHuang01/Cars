@@ -11,9 +11,11 @@ def run_game():
     pygame.display.set_caption('Quick Start')
     builder = Builder(screen, pygame)
     builder.build()
+    roads = builder.roads[0:4]
 
     first_car = builder.cars[0]
     self_driving_car = SelfDrivingCar(first_car)
+    self_driving_car.is_inside_shape(roads)
     starting_position = Position(100, 100)
     ending_position = Position(300, 400)
     self_driving_car.set_start_position(starting_position)
