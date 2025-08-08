@@ -24,7 +24,7 @@ class Position():
         shortest_distance = 6000
         for position in positions:
             distance = self.get_distance(position)
-            if distance <= shortest_distance:
+            if distance < shortest_distance:
                 shortest_distance  = distance
                 shortest_position = position
         return shortest_position

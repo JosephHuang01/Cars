@@ -14,7 +14,11 @@ class Builder():
         self.screen_size = self.screen.get_size()
         self.cars = []
         self.roads = []
+        self.cities = []
 
+    def get_map(self):
+        return self.grid_map
+    
     def build(self):
         shape_spec_map = ShapeSpecification()
         shape_spec_map.name = 'Game Map'
@@ -27,17 +31,17 @@ class Builder():
         self.grid_map.center_position()
 
         city_specs = CityRepo().get_specs()
-        cities = [] # CityRepo(screen, pygame).get_cities()
+        self.cities = [] # CityRepo(screen, pygame).get_cities()
         for city_spec in city_specs:
-            cities.append(City(self.screen, self.pygame, city_spec))
-        for city in cities:
+            self.cities.append(City(self.screen, self.pygame, city_spec))
+        for city in self.cities:
             self.grid_map.add_city(city)
 
         road_specs = RoadRepo().get_specs()
-        roads = []
+        self.roads = []
         for road_spec in road_specs:
-            roads.append(Road(self.screen, self.pygame, road_spec))
-        for road in roads:
+            self.roads.append(Road(self.screen, self.pygame, road_spec))
+        for road in self.roads:
             self.grid_map.add_road(road)
 
         car_specs = CarRepo().get_specs()

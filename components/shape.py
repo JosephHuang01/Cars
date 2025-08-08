@@ -38,8 +38,8 @@ class Shape():
 
     def is_inside_the_shape(self, position):
         return(
-            self.top_left_position.x < position.x < self.top_right_position.x and
-            self.top_left_position.y < position.y < self.bottom_left_position.y
+            self.top_left_position.x <= position.x <= self.top_right_position.x and
+            self.top_left_position.y <= position.y - 6 <= self.bottom_left_position.y
         )
 
     # def __init__(self, screen, pygame, name, type, position, width, length, bg_color, fg_color):

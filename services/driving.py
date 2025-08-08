@@ -3,9 +3,7 @@ from components.car import Car
 from components.driving_direction import DrivingDirection
 from components.position import Position
 from database.road_repo import RoadRepo
-from components.road import Road
-from services.builder import Builder
-from components.shape import Shape
+from database.car_repo import CarRepo
 
 class Driving():
     def __init__(self, screen, pygame):
@@ -26,7 +24,8 @@ class Driving():
             self.drive(DrivingDirection.BACKWARD, 1)
 
 class SelfDrivingCar():
-    def __init__(self, car, step = 1):
+    def __init__(self, map, car, step = 1):
+        self.map = map
         self.start_position = Position(0,0)
         self.end_position = Position(0,0)
         self.current_position = self.start_position    
@@ -34,6 +33,8 @@ class SelfDrivingCar():
         self.step = step
         self.road_repo = RoadRepo()
         self.road_specs = self.road_repo.get_specs()
+        self.car_repo = CarRepo()
+        self.car_specs = self.car_repo.get_specs()
     
     def set_start_position(self, position):
         self.start_position = position
@@ -43,22 +44,35 @@ class SelfDrivingCar():
     def add_destination(self, position):
         self.end_position = position
     
-    def build(self):
-        self.builder = Builder(self.screen, self.pygame)
-        self.builder.build
+    # def build(self):
+    #     self.builder = Builder(self.screen, self.pygame)
+    #     self.builder.build()
     
-    def is_inside_shape(self, roads):
-        x, y = self.car.position.x, self.car.position.y
-        # return (road.position.x <= x <= road.position.x + road.width and
-        #     road.position.y <= y <= road.position.y + road.length)
-        for road in roads:
-            return (roads.left <= x <= roads.right and roads.top <= y <= roads.bottom)
+    # def is_inside_shape(self, roads):
+    #     x, y = self.car.position.x, self.car.position.y
+    #     # return (road.position.x <= x <= road.position.x + road.width and
+    #     #     road.position.y <= y <= road.position.y + road.length)
+    #     for road in roads:
+    #         return (roads.left <= x <= roads.right and roads.top <= y <= roads.bottom)
 
     def drive(self):
         if not self.current_position.is_same_position(self.end_position):
             proposed_destinations = self.current_position.get_positions_in_four_directions(self.step)
             #road_directions = self.is_inside_shape(self.road_specs)
             #drive_on_road_calculations = self.end_position.find_shortest_distance_to_position(road_directions)
-            calculated_shortest_position = self.end_position.find_shortest_distance_to_position(proposed_destinations)
+
+            # the proposed destinations are on road or in city
+            # self.map.is_position_on_road
+            proposed_destinations_on_road_or_in_city = []
+            for position in proposed_destinations:
+                if (self.map.is_position_on_road(position)):
+                    proposed_destinations_on_road_or_in_city.append(position)
+                elif (self.map.is_position_on_city(position)):
+                    proposed_destinations_on_road_or_in_city.append(position)
+
+            calculated_shortest_position = self.end_position.find_shortest_distance_to_position(proposed_destinations_on_road_or_in_city)
             self.current_position = calculated_shortest_position
             self.car.position = self.current_position
+            print ("Proposed positions: ", proposed_destinations)
+            print ("On road or in city: ", proposed_destinations_on_road_or_in_city)
+            print ("Shortest position: ", self.current_position)

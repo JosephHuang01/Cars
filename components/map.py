@@ -33,8 +33,19 @@ class Map(Shape):
             road.show()
     
     def is_position_on_road(self, position):
+        is_on_road = False
         for road in self.roads:
             if road.is_inside_the_shape(position):
-                return True
-            else:
+                is_on_road = True
                 break
+
+        return is_on_road
+    
+    def is_position_on_city(self, position):
+        is_on_city = False
+        for city in self.cities:
+            if city.is_inside_the_shape(position):
+                is_on_city = True
+                break
+        
+        return is_on_city
