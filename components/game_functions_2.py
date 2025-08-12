@@ -24,7 +24,6 @@ class GameFunctions():
             car_explorer.moving_down = False
 
     def check_events(car_explorer):
-        #grid = Map()
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -35,7 +34,6 @@ class GameFunctions():
             elif event.type == pygame.KEYUP:
                 GameFunctions.check_keyup_events(event, car_explorer)
         
-        #if car_explorer.moving_right and car_column < grid.grid_size - 1:
         if car_explorer.moving_right:
                 car_explorer.drive(DrivingDirection.RIGHT, 1)
                 car_explorer.angle = 0
@@ -48,28 +46,8 @@ class GameFunctions():
         elif car_explorer.moving_down:
                 car_explorer.drive(DrivingDirection.BACKWARD, 1)
                 car_explorer.angle = 270
-                # car_column += 1
-                # car_explorer.moving_right = False
-                # car_explorer.direction = 'RIGHT'
-                # car_explorer.angle = 0
-        # elif car_explorer.moving_left and car_column > 0:
-        #     car_column -= 1
-        #     car_explorer.moving_left = False
-        #     car_explorer.direction = 'LEFT'
-        #     car_explorer.angle = 180
-        # elif car_explorer.moving_up and car_row > 0:
-        #     car_row -= 1
-        #     car_explorer.moving_up = False
-        #     car_explorer.direction = 'UP'
-        #     car_explorer.angle = 90
-        # elif car_explorer.moving_down and car_row < grid.grid_size - 1:
-        #     car_row += 1
-        #     car_explorer.moving_down = False
-        #     car_explorer.direction = 'DOWN'
-        #     car_explorer.angle = 270
 
     def update_screen(ai_settings, screen, car_explorer):
-        #screen.fill(ai_settings.bg_color)
         car_explorer.blitme()
 
         pygame.display.flip()

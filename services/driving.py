@@ -43,26 +43,10 @@ class SelfDrivingCar():
 
     def add_destination(self, position):
         self.end_position = position
-    
-    # def build(self):
-    #     self.builder = Builder(self.screen, self.pygame)
-    #     self.builder.build()
-    
-    # def is_inside_shape(self, roads):
-    #     x, y = self.car.position.x, self.car.position.y
-    #     # return (road.position.x <= x <= road.position.x + road.width and
-    #     #     road.position.y <= y <= road.position.y + road.length)
-    #     for road in roads:
-    #         return (roads.left <= x <= roads.right and roads.top <= y <= roads.bottom)
 
     def drive(self):
         if not self.current_position.is_same_position(self.end_position):
             proposed_destinations = self.current_position.get_positions_in_four_directions(self.step)
-            #road_directions = self.is_inside_shape(self.road_specs)
-            #drive_on_road_calculations = self.end_position.find_shortest_distance_to_position(road_directions)
-
-            # the proposed destinations are on road or in city
-            # self.map.is_position_on_road
             proposed_destinations_on_road_or_in_city = []
             for position in proposed_destinations:
                 if (self.map.is_position_on_road(position)):

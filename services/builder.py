@@ -31,7 +31,7 @@ class Builder():
         self.grid_map.center_position()
 
         city_specs = CityRepo().get_specs()
-        self.cities = [] # CityRepo(screen, pygame).get_cities()
+        self.cities = []
         for city_spec in city_specs:
             self.cities.append(City(self.screen, self.pygame, city_spec))
         for city in self.cities:
@@ -54,7 +54,5 @@ class Builder():
     def show(self):
         self.grid_map.show()
         self.grid_map.show_cities()
-        #self.demo_shape.show()
-        #self.demo_car.show()
         self.grid_map.show_roads()
         self.grid_map.show_cars()

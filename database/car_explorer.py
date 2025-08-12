@@ -1,7 +1,6 @@
 import pygame
 import pyodbc
 from components.car import Car, Position
-#from
 
 class CarNavigation():
     def __init__(self, ai_settings, screen):

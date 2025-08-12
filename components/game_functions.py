@@ -32,7 +32,6 @@ class GameFunctions():
                 GameFunctions.check_keyup_events(event, car_explorer)
 
     def update_screen(ai_settings, screen, car_explorer):
-        #screen.fill(ai_settings.bg_color)
         car_explorer.blitme()
 
         pygame.display.flip()

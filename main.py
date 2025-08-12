@@ -3,7 +3,6 @@ from components.settings import Settings
 from services.builder import Builder
 from services.driving import SelfDrivingCar
 from components.position import Position
-from components.map import Map
 
 def run_game():
     pygame.init()

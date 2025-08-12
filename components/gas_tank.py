@@ -11,6 +11,5 @@ class GasTank():
         return self.percentage
     
     def fill_gas(self):
-        #self.capacity = self.capacity_left
         self.capacity_left = self.capacity
         self.percentage = 100

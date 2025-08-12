@@ -1,7 +1,6 @@
 import pygame
 from factories.build_specification import BuildSpecification
-from components.car import CommonGameColor, RandomizeCarColor
-#import pygame_gui
+from components.common_game_color import CommonGameColor, RandomizeCarColor
 
 # todo: move this to main.py in the root folder
 
@@ -19,16 +18,12 @@ window_surface = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 car_x = 300
 car_y = 300
-#player = pygame.Rect((300, 250, 100, 200))
 
 background = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-#manager = pygame_gui.UIManager((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 is_running = True
 
 while is_running:
-    #background.fill(pygame.Color("#08226D"))
-    #window_surface.fill((173, 216, 230))
     window_surface.fill(build_specification.color_list[0])
 
     player = [
@@ -36,9 +31,7 @@ while is_running:
         (car_x + 120, car_y),
         (car_x + 120, car_y - 40),
         (car_x + 80, car_y - 70),
-        #(car_x + 80, car_y - 40),
         (car_x + 40, car_y - 70),
-        #(car_x + 40, car_y - 40),
         (car_x, car_y - 40)
     ]
 
@@ -51,22 +44,17 @@ while is_running:
     key = pygame.key.get_pressed()
     if key[pygame.K_a] == True:
         car_x -= 2
-        #player.move_ip(-1, 0)
     elif key[pygame.K_d] == True:
         car_x += 2
-        #player.move_ip(1, 0)
     elif key[pygame.K_w] == True:
         car_y -= 2
-        #player.move_ip(0, -1)
     elif key[pygame.K_s] == True:
         car_y += 2
-        #player.move_ip(0, 1)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             is_running = False
 
-    #window_surface.blit(background, (0, 0))
     pygame.display.update()
 
 pygame.quit()

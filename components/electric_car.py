@@ -1,4 +1,4 @@
-from components.car import Car, Seat
+from components.car import Car
 from components.battery import Battery
 from components.person import Driver, Passenger
 
@@ -11,23 +11,13 @@ class ElectricCar(Car):
 
     def drive(self, direction, distance):
         super().drive(direction, distance)
-        #self.battery.travel_distance(miles_drove)
         self.miles_drove += distance
         self.battery.travel_distance(distance)
     
     def charge(self):
-        #self.capacity_left = self.capacity
-        #self.life = 100
         Battery.charge()
     
     def replace_battery(self, battery):
-        # if capacity == 0:
-        #     capacity = self.battery.capacity
-        # self.capacity = capacity
-        # self.capacity = Battery(capacity)
-        # self.capacity_left = capacity
-        # self.life = 100
-        # self.battery = Battery(capacity, kwh_used_per_mile)
         self.battery = battery
     
     def assigned_driver(self, name):
@@ -37,7 +27,3 @@ class ElectricCar(Car):
     def add_passenger(self, name):
         self.passenger = Passenger(name)
         return self.passenger
-    
-    def seat_number(self, number):
-        self.seat = Seat(number)
-        return self.seat

@@ -11,8 +11,3 @@ class ElectricCarFactory():
         battery = self.battery_factory.build_battery(build_specification.battery_capacity)
         self.electric_car_assembly_line.replace_battery(battery)
         return electric_car_model
-    
-    # def include_battery(self, capacity):
-    #     full_battery = self.battery_factory.build_battery(capacity)
-    #     return full_battery
-

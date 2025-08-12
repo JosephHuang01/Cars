@@ -22,29 +22,3 @@ class ElectricCarAssemblyLine(AssemblyLine):
     
     def replace_battery(self, battery):
         self.assembled_model.replace_battery(battery)
-
-# class AssemblyLine():
-#     def __init__(self):
-#         self.assembled_model = ElectricCar('', '', '')
-#         self.reset_process()
-
-#     def reset_process(self):
-#         self.assembled_model
-
-#     def assembled_car_model(self, make, model, year):
-#         self.assembled_model.make = make
-#         self.assembled_model.model = model
-#         self.assembled_model.year = year
-#         return self
-    
-#     def include_battery(self, capacity, kwh_used_per_mile):
-#         self.assembled_model = Battery(capacity, kwh_used_per_mile)
-
-#     def build_model(self):
-#         finished_model = self.assembled_model
-#         self.reset_process()
-#         return finished_model
-
-# class IncludeBattery(Battery):
-#     def __init__(self, capacity, kwh_used_per_mile=0.2):
-#         super().__init__(capacity, kwh_used_per_mile)

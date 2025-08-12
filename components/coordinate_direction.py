@@ -1,8 +1,5 @@
 from components.driving_direction import DrivingDirection
 
-# todo: add a unit test file for this class
-# todo: Add a car unit test file as well
-
 class CoordinateDirection:
     X_PLUS = "X"    
     X_MINUS = "-X"
