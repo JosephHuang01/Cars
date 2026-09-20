@@ -46,6 +46,16 @@ You can also run one of the project’s unit tests to get a feel for the codebas
 python -m unit_tests.components.road_unit_test
 ```
 
+## Documentation assets
+
+These are the project artifacts included from the `docs/` folder:
+
+![Car Explorer Cars In Transit](docs/Car-Explorer-Cars-In-Transit.png)
+
+![Car Explorer Design UI](docs/Car-Explorer-Design-UI.png)
+
+- [Project Excel file](docs/test_cases.xlsx)
+
 ## Project structure
 
 A quick way to explore the code is to start with the main folders:
