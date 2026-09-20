@@ -1,0 +1,65 @@
+from components.position import Position
+from components.common_game_color import CommonGameColor
+
+class ShapeSpecification():
+    def __init__(self):
+        self.name = ''
+        self.type = 'shape'
+        self.position = Position(0,0)
+        self.width = 0
+        self.length = 0
+        self.bg_color = CommonGameColor.GRAY
+        self.fg_color = CommonGameColor.BLACK
+
+class Shape():
+    def __init__(self, screen, pygame, shape_spec):
+        self.screen = screen
+        if self.screen is not None:
+            self.screen_size = self.screen.get_size()
+        self.pygame = pygame
+        if self.pygame is not None:
+            self.font = pygame.font.SysFont(None, 15)
+        self.name = shape_spec.name
+        self.type = shape_spec.type
+        self.position = shape_spec.position
+        self.width = shape_spec.width  
+        self.length = shape_spec.length  
+        self.bg_color = shape_spec.bg_color
+        self.fg_color = shape_spec.fg_color
+        self.drawing_points = []
+        
+        self.__calc_four_corner_positions()
+    
+    def __calc_four_corner_positions(self):
+        self.top_left_position = self.position
+        self.top_right_position = Position(self.position.x + self.width, self.position.y)
+        self.bottom_left_position = Position(self.position.x, self.position.y + self.length)
+        self.bottom_right_position = Position(self.position.x + self.width, self. position.y + self.length)
+
+    def is_inside_the_shape(self, position):
+        return(
+            self.top_left_position.x <= position.x <= self.top_right_position.x and
+            self.top_left_position.y <= position.y <= self.bottom_left_position.y
+        )          
+   
+    def center_position(self):
+        screen_width, screen_height = self.screen_size
+        screen_x = (screen_width - self.width)/2
+        screen_y = (screen_height - self.length)/2
+        self.position = Position(screen_x, screen_y)
+
+    def draw_rectangle(self, name, position, width, height):
+        rect_img = self.pygame.Rect(position.x, position.y, width, height)
+        self.pygame.draw.rect(self.screen, self.bg_color, rect_img)
+    
+    def draw_text_on_rectangle(self, text, position, width, height):
+        text_surface = self.font.render(text, True, self.fg_color)
+        text_rect = text_surface.get_rect(center=(position.x + width/2, position.y + height/2))
+        self.screen.blit(text_surface, text_rect)
+    
+    def show(self):
+        self.draw_rectangle(self.name, self.position, self.width, self.length)
+        self.draw_text_on_rectangle(self.name, self.position, self.width, self.length)
+        if len(self.drawing_points) >= 2:
+               points = [(p.x, p.y) for p in self.drawing_points]
+               self.pygame.draw.lines(self.screen, self.fg_color, False, points, 3)
