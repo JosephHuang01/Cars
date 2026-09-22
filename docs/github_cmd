@@ -1,0 +1,33 @@
+git clone https://github.com/JosephHuang01/Cars.git
+
+cd cars
+
+code .
+
+Create a feature branch
+git checkout -b feature/short-description
+
+Save changes
+Commit with explanation message
+git add .
+git commit -m "Describe the change"
+
+pull
+git pull origin main
+
+push
+git push -u origin feature/short-description
+
+Pull Requests
+1. Open the repository on GitHub.
+2. Select "Compare & pull request" for the pushed branch.
+3. Set the base branch to `main` and review the changed files.
+4. Add a clear title and describe the change, tests, and any follow-up work.
+5. Create the pull request and request a review.
+6. Address review comments by committing and pushing additional changes to the same branch.
+7. After approval and passing checks, merge the pull request into `main`.
+8. Delete the feature branch after it has been merged.
+
+Update the local main branch after merging
+git checkout main
+git pull origin main

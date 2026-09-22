@@ -1,8 +1,6 @@
 # Cars
 
-Welcome to the Cars project — a small, interactive Python simulation built around city navigation, car behavior, and game logic.
-
-This project is a great starting point if you want to explore object-oriented design, game systems, factories, services, and test-driven development in a practical example.
+Welcome to Cars — a hands‑on Python simulation built to explore city navigation, autonomous car behavior, and clean architectural patterns. It’s a practical example of how components, services, factories, and tests can work together to drive a small but expressive game‑style system.
 
 ## What this project does
 
@@ -48,13 +46,110 @@ python -m unit_tests.components.road_unit_test
 
 ## Documentation assets
 
-These are the project artifacts included from the `docs/` folder:
-
-![Car Explorer Cars In Transit](docs/Car-Explorer-Cars-In-Transit.png)
+### UI design
 
 ![Car Explorer Design UI](docs/Car-Explorer-Design-UI.png)
 
-- [Project Excel file](docs/test_cases.xlsx)
+### Architecture
+
+```mermaid
+flowchart TB
+	subgraph Entry
+		A[main.py]
+	end
+
+	subgraph Presentation
+		B[Pygame UI]
+		C[Map rendering]
+	end
+
+	subgraph Application Layer
+		D[Builder]
+		E[SelfDrivingCar]
+		F[Driving logic]
+	end
+
+	subgraph Domain Layer
+		G[components/]
+		H[City]
+		I[Road]
+		J[Car]
+		K[Position]
+		L[Map]
+	end
+
+	subgraph Factory Layer
+		M[factories/]
+		N[Electric/Gas/Hybrid factories]
+		O[Assembly lines]
+	end
+
+	subgraph Data Layer
+		P[database/]
+		Q[CityRepo]
+		R[RoadRepo]
+		S[CarRepo]
+		T[BaseRepo]
+		U[SQL Server: CarExplorer]
+	end
+
+	subgraph Quality
+		V[unit_tests/]
+	end
+
+	A --> D
+	D --> G
+	D --> P
+	D --> B
+	D --> H
+	D --> I
+	D --> J
+	D --> L
+	E --> L
+	E --> G
+	F --> E
+	B --> C
+	C --> G
+	M --> O
+	O --> J
+	M --> N
+	N --> J
+	P --> T
+	T --> U
+	Q --> U
+	R --> U
+	S --> U
+	V --> D
+	V --> E
+	V --> M
+	V --> G
+```
+
+```mermaid
+sequenceDiagram
+	participant User
+	participant Main as main.py
+	participant Builder
+	participant Repo as Repositories
+	participant Map
+	participant Car
+	participant UI as Pygame
+
+	User->>Main: Run project
+	Main->>Builder: build()
+	Builder->>Repo: load city/road/car specs
+	Repo-->>Builder: returns data
+	Builder->>Map: create world and add objects
+	Builder->>Car: instantiate cars
+	Builder-->>Main: ready
+	loop Simulation
+		Main->>Car: drive()
+		Car->>Map: validate road/city positions
+		Map-->>Car: valid next positions
+		Car-->>UI: render updated position
+		UI-->>User: visual feedback
+	end
+```
 
 ## Project structure
 
@@ -64,6 +159,7 @@ A quick way to explore the code is to start with the main folders:
 - `services/` — driving logic and shared helper functionality
 - `factories/` — creation logic for building different car types and parts
 - `database/` — repository and data-access code
+- `docs/` — project documentation and visual assets
 - `unit_tests/` — test examples for validating behavior
 - `main.py` — the entry point for the demo
 
