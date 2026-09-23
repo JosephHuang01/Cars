@@ -1,6 +1,8 @@
-# Cars
+# Self-Driving Cars
 
-Welcome to Cars — a hands‑on Python simulation built to explore city navigation, autonomous car behavior, and clean architectural patterns. It’s a practical example of how components, services, factories, and tests can work together to drive a small but expressive game‑style system.
+Welcome to Self-Driving Cars — a hands‑on Python simulation built to explore city navigation, autonomous car behavior, and clean architectural patterns. It’s a practical example of how components, services, factories, and tests can work together to drive a small but expressive game‑style system.
+
+I’m a recent college graduate looking for a job, and this project is one of the personal projects I’ve been building to share with employers. It offers a look at the kind of work I’m capable of, and I hope it helps demonstrate my skills, problem-solving approach, and motivation. I encourage employers and collaborators to explore the code and see what I can bring to a team.
 
 ## What this project does
 
