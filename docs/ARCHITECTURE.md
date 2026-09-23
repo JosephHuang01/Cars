@@ -177,7 +177,7 @@ sequenceDiagram
 ## Folder map
 
 ```text
-Cars/
+Self-Driving Cars/
 ├── main.py                      # application entry point
 ├── README.md                   # project overview and usage
 ├── ARCHITECTURE.md             # repository architecture overview
